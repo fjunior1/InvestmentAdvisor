@@ -18,7 +18,35 @@ const userSchema = new Schema({
     type: String,
     required: true,
     minlength: 5,
+  },
+
+  // FD adding extra informaiton for user based on documentation : 
+  // name, lastName, address, phone, income[range{ enum}], age[range{ enum}]
+  name: {
+    type: String,
+    required: true,
+    minlength: 5,
+  },
+
+  lastName: {
+    type: String,
+    required: true,
+    minlength: 5,
+  },
+
+
+  address: {
+    type: String,
+    required: true,
+    minlength: 5,
   }
+
+
+
+
+
+
+
 });
 
 userSchema.pre('save', async function (next) {

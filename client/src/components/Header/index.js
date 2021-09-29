@@ -17,6 +17,12 @@ const Header = () => {
           <Link className="btn btn-lg btn-info m-2" to="/me">
             {Auth.getProfile().data.username}'s profile
           </Link>
+          <Link className="btn btn-lg btn-info m-2" to="/prefere4nces">
+          Preferences
+        </Link>
+        <Link className="btn btn-lg btn-info m-2" to="/results">
+          Results
+        </Link>
           <button className="btn btn-lg btn-light m-2" onClick={logout}>
             Logout
           </button>
@@ -41,11 +47,11 @@ const Header = () => {
       <div className="container flex-row justify-space-between-lg justify-center align-center">
         <div>
           <Link className="text-light" to="/">
-            <h1 className="m-0">Fun User List</h1>
+            <h1 className="m-0">Investment Advisor Application</h1>
           </Link>
         </div>
         <div>
-          <p className="m-0 text-center">Simple App to View Users.</p>
+          <p className="m-0 text-center">Simple App to View Clients.</p>
           {renderControls()}
         </div>
       </div>

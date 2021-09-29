@@ -15,8 +15,8 @@ const Footer = () => {
             &larr; Go Back
           </button>
         )}
-        <h4>
-          Made with{' '}
+        <p>
+          Developed by{' '}
           <span
             className="emoji"
             role="img"
@@ -26,7 +26,7 @@ const Footer = () => {
             ❤️
           </span>{' '}
           by the Good Times team.
-        </h4>
+        </p>
       </div>
     </footer>
   );
