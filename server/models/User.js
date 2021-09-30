@@ -1,6 +1,10 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
+const AGE = ["18-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75+"];
+const INCOME = ["<30k", "30k-49k", "50k-69k", "70k-89k", "90k-109k", "110k-129k",
+  "130k-149k", "150k-169k", "170k-189k", "190k-209k", "210k-229k", "230k-249k", "250k+"];
+
 const userSchema = new Schema({
   username: {
     type: String,
@@ -20,33 +24,39 @@ const userSchema = new Schema({
     minlength: 5,
   },
 
-  // FD adding extra informaiton for user based on documentation : 
+  // FD adding extra information for user based on documentation : 
   // name, lastName, address, phone, income[range{ enum}], age[range{ enum}]
   name: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 3,
   },
-
   lastName: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 3,
   },
-
-
   address: {
     type: String,
+    required: false,
+    minlength: 10,
+  },
+  phone: {
+    type: String,
+    required: false,
+    unique: false,
+    match: [/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/, 'Must match phone number format !'],
+  },
+  income:{
+    type: String,
+    enum: INCOME,
     required: true,
-    minlength: 5,
-  }
-
-
-
-
-
-
-
+  },
+  age:{
+    type: String,
+    required: true,
+    enum: AGE,
+  }  
 });
 
 userSchema.pre('save', async function (next) {

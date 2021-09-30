@@ -51,7 +51,7 @@ const Header = () => {
           </Link>
         </div>
         <div>
-          <p className="m-0 text-center">Simple App to View Clients.</p>
+          <p className="m-0 text-center">Let your investments work for you.</p>
           {renderControls()}
         </div>
       </div>

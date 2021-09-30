@@ -16,16 +16,16 @@ const Footer = () => {
           </button>
         )}
         <p>
-          Developed by{' '}
+          Developed by the Financial Theorist Group.{' '}
           <span
             className="emoji"
             role="img"
-            aria-label="heart"
+            aria-label="finance"
             aria-hidden="false"
           >
             ❤️
           </span>{' '}
-          by the Good Times team.
+         
         </p>
       </div>
     </footer>
