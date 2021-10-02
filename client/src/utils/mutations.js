@@ -13,8 +13,32 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
+  mutation addUser($username: String!, $email: String!, $password: String!
+                     $name: String!, $lastName:String, $address:String,
+                     $phone: String, $income: String, $age:String, $risk:String) {
+    addUser(username: $username, email: $email, password: $password,
+            name: $name, lastName: $lastName, address:$address,
+            phone: $phone, income:$income, age:$age, risk:$risk  ) {
+      token
+      user {
+        _id
+        username
+      }
+    }
+  }
+`;
+
+//
+//  FD finish this to update user from profile and preference pages when logged in
+//
+
+export const UPDATE_USER = gql`
+  mutation updateUser($username: String!, $email: String!, $password: String!
+                     $name: String!, $lastName:String, $address:String,
+                     $phone: String, $income: String, $age:String, $risk:String) {
+    addUser(username: $username, email: $email, password: $password,
+            name: $name, lastName: $lastName, address:$address,
+            phone: $phone, income:$income, age:$age, risk:$risk  ) {
       token
       user {
         _id

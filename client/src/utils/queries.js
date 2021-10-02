@@ -16,6 +16,7 @@ export const QUERY_USER = gql`
       _id
       username
       email
+      password
     }
   }
 `;
@@ -26,6 +27,11 @@ export const QUERY_ME = gql`
       _id
       username
       email
+      password
+      name
+      lastName
+      address
+      phone
     }
   }
 `;

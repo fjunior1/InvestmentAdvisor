@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import Auth from '../../utils/auth';
 
@@ -9,21 +9,34 @@ const Header = () => {
     Auth.logout();
   };
 
+  function ButtonColors(page) {
+    //const location = useLocation();
+    const nowPath = /*location*/useLocation().pathname.substring(1);
+
+    if (page === nowPath) {
+      return "btn btn-lg  m-2 btn-light";
+    } else {
+      return "btn btn-lg  m-2 btn-info";
+    }
+  }
+
   const renderControls = () => {
     // If logged in show logout controls
     if (Auth.loggedIn()) {
+      // get page to 
+      //{/* "btn btn-lg btn-info {} m-2" */}
       return (
         <>
-          <Link className="btn btn-lg btn-info m-2" to="/me">
+          <Link id="me" className={ButtonColors("me") } to="/me">
             {Auth.getProfile().data.username}'s profile
           </Link>
-          <Link className="btn btn-lg btn-info m-2" to="/prefere4nces">
-          Preferences
-        </Link>
-        <Link className="btn btn-lg btn-info m-2" to="/results">
-          Results
-        </Link>
-          <button className="btn btn-lg btn-light m-2" onClick={logout}>
+          <Link id="preferences" className={ButtonColors("preferences") } to="/preferences">
+             Preferences 
+          </Link>
+          <Link id="results" className={ButtonColors("results") } to="/results">
+            Results
+          </Link>
+          <button className="btn btn-lg btn-info m-2" onClick={logout}>
             Logout
           </button>
         </>
@@ -43,7 +56,8 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-dark text-light mb-4 py-3 flex-row align-center">
+    /*changed bg-dark to bg-hreader to use a lighter color*/
+    <header className="bg-header text-light mb-4 py-3 flex-row align-center">
       <div className="container flex-row justify-space-between-lg justify-center align-center">
         <div>
           <Link className="text-light" to="/">

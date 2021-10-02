@@ -15,7 +15,14 @@ const Home = () => {
     if (loading) {
       return <h2>Loading...</h2>
     } else {
-      return <UserList users={users} title="Client List" />
+      if (!Auth.loggedIn()) {
+        // home page with no ser logged in
+        return <UserList users={users} title="Client List" />
+      } else {
+        // have to redirect to profile pagfe of user
+        return <UserList users={users} title="Client List" />
+      }
+      //
     }
   } 
 
@@ -29,9 +36,9 @@ const Home = () => {
       <div className="flex-row justify-center">
         <div
           className="col-12 col-md-10 mb-3 p-3"
-          style={{ border: '1px dotted #1a1a1a' }}
+         // style={{ border: '1px dotted #1a1a1a' }}
         >
-          {renderUsername()}
+         {renderUsername()}
         </div>
         <div className="col-12 col-md-8 mb-3">
           {renderUserList()}

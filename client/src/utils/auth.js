@@ -29,12 +29,14 @@ class AuthService {
 
   login(idToken) {
     localStorage.setItem('id_token', idToken);
-    window.location.assign('/');
+    window.location.assign('/me');
   }
 
   logout() {
     localStorage.removeItem('id_token');
-    window.location.reload();
+    //window.location.reload();
+    // FD assign logout page to home instead of /me
+    window.location.assign('/');
   }
 }
 

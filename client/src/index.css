@@ -919,6 +919,10 @@ a:hover {
 }
 
 /* BACKGROUND UTILS */
+.bg-header {  /* header background color*/
+  background-color: #1f6abb !important;
+}
+
 .bg-primary {
   background-color: #2d3e50 !important;
 }
@@ -939,6 +943,9 @@ a:hover {
   background-color: #1a1a1a !important;
 }
 
+.bg-lightgray {
+  background-color: lightgray !important;
+}
 .bg-white {
   background-color: #ffffff !important;
 }
@@ -948,7 +955,7 @@ a:hover {
 }
 
 .bg-link {
-  background-color: #1b89bc !important;
+  background-color:  #1b89bc !important;
 }
 
 /* DISPLAY */

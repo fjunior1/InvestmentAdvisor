@@ -23,7 +23,7 @@ const Footer = () => {
             aria-label="finance"
             aria-hidden="false"
           >
-            ❤️
+           $$$
           </span>{' '}
          
         </p>

@@ -12,6 +12,8 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import Preferences from './pages/Preferences';
+import Results from './pages/Results';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -57,6 +59,12 @@ function App() {
             </Route>
             <Route exact path="/me">
               <Profile />
+            </Route>
+            <Route exact path="/preferences">
+              <Preferences />
+            </Route>
+            <Route exact path="/results">
+              <Results />
             </Route>
             <Route exact path="/users/:id">
               <Profile />
