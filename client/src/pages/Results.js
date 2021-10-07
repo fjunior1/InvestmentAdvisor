@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 //import { UPDATE_PREFS } from '../utils/mutations';
+import  Calcs  from '../utils/calcs';
 import { Doughnut, Line } from 'react-chartjs-2';
 
 // Utilities
@@ -13,68 +14,40 @@ const AGE = ["18-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-
 const INCOME = ["<30k", "30k-49k", "50k-69k", "70k-89k", "90k-109k", "110k-129k",
     "130k-149k", "150k-169k", "170k-189k", "190k-209k", "210k-229k", "230k-249k", "250k+"];
 const RISK = ["minimum", "low", "medium", "high", "maximum"];
+const RiskInt = [0.03,    0.07,  0.1 , 0.14, 0.2 ]
+
+    // line chart input
+    const lineData = {
+        labels: ['1', '2', '3', '4', '5', '6'],
+        datasets: [
+            {
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                fill: false,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgba(255, 99, 132, 0.2)',
+            },
+        ],
+    };
+
+    const lineOptions = {
+        scales: {
+            yAxes: [
+                {
+                    ticks: {
+                        beginAtZero: true,
+                    },
+                },
+            ],
+        },
+    };
+
+var updating = false;
 
 const Results = (props) => {
     const { id } = useParams();
     const [formState, setFormState] = useState({})
-    // const [updatePrefs, err] = useMutation(UPDATE_PREFS);
-    // Get current user
-    const { loading, data, error } = useQuery(id ? QUERY_USER : QUERY_ME, {
-        variables: { id },
-    });
 
-    const user = data?.me || data?.user || {};
-
-    useEffect(() => {
-        if (user && !loading) {
-            const { name, password, lastName, email, address, phone, ...tmp } = user;
-            console.log(tmp);
-            setFormState(tmp);
-        }
-    }, [user, loading])
-
-    useEffect(() => {
-        if (formState !== undefined) {
-            //console.log(formState.age)
-            // calculateUpdates();
-
-            // do acalculations here
-            console.log(formState.age);
-            switch (formState.age) {
-                case AGE[0]:
-                    console.log("young");
-                    break;
-
-                case AGE[1]:
-                    console.log("mid 20's");
-                    break;
-                default:
-                    break;
-            }
-        }
-    }, [formState, user, loading])
-
-
-
-    if (error) console.log(error);
-
-    // redirect to personal profile page if username is yours
-    if (Auth.loggedIn() && Auth.getProfile().data._id === id) {
-        return <Redirect to="/me" />;
-    }
-
-    if (loading) {
-        return <h4>Loading...</h4>;
-    }
-
-    if (!user?.username) {
-        return (
-            <h4>
-                You need to be logged in to see this. Use the navigation links above to
-                sign up or log in!
-            </h4>
-        );
-    }
 
     // do calculations here
 
@@ -108,33 +81,96 @@ const Results = (props) => {
     const options = {
     };
 
-    // line chart input
-    const lineData = {
-        labels: ['1', '2', '3', '4', '5', '6'],
-        datasets: [
-            {
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                fill: false,
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgba(255, 99, 132, 0.2)',
-            },
-        ],
-    };
 
-    const lineOptions = {
-        scales: {
-            yAxes: [
-                {
-                    ticks: {
-                        beginAtZero: true,
-                    },
-                },
-            ],
-        },
-    };
+    // const [updatePrefs, err] = useMutation(UPDATE_PREFS);
+    // Get current user
+    const { loading, data, error } = useQuery(id ? QUERY_USER : QUERY_ME, {
+        variables: { id },
+    });
 
+    const user = data?.me || data?.user || {};
 
+    useEffect(() => {
+        if (user && !loading) {
+            const { name, password, lastName, email, address, phone, ...tmp } = user;
+            //console.log("before: " +tmp);
+            tmp.lineData =lineData;
+            // console.log("after: " + tmp);
+            setFormState(tmp );
+        }
+    }, [ user, loading])
+
+    useEffect(() => {
+        if (updating && (formState !== undefined)) {
+
+            let lineData = JSON.parse(JSON.stringify(formState.lineData));
+            updating = false;
+
+            //lineData = Calcs(lineData);
+            // init data arrays
+            lineData.labels = [];
+            lineData.datasets[0].data = [];
+
+           // get index of age to set the years of savings for retirement
+            console.log("age index: " + AGE.indexOf(formState.age))
+            const indexAge = AGE.indexOf(formState.age);
+            const riskRate = RiskInt[RISK.indexOf(formState.risk)]
+            const savingsRate = 1000;
+            // set years
+            for (let i = 0 ,age = (20 + 5*indexAge); age < 65;age++,i++){
+                lineData.labels[i] = age;
+
+                // calculate savings
+                lineData.datasets[0].data[i] = (i === 0) ? savingsRate :
+                                               lineData.datasets[0].data[i - 1] * (1 + riskRate);
+            }
+            console.log(lineData.datasets[0].data)
+
+            switch (formState.age) {
+                case AGE[0]:
+
+                    (lineData.datasets[0].data[0])++;
+                    break;
+
+                case AGE[1]:
+                    //console.log("mid 20's");
+                    lineData.datasets[0].data[1]--;
+                    break;
+                default:
+                    break;
+            }
+            console.log(formState.lineData);
+            console.log(lineData);
+            setFormState({
+                ...formState,
+                income: user.income,
+                lineData: lineData,
+                // age: user.age,
+                risk: formState.risk
+            });
+        }
+        
+    }, [ formState, user, loading])
+
+    if (error) console.log(error);
+
+    // redirect to personal profile page if username is yours
+    if (Auth.loggedIn() && Auth.getProfile().data._id === id) {
+        return <Redirect to="/me" />;
+    }
+
+    if (loading) {
+        return <h4>Loading...</h4>;
+    }
+
+    if (!user?.username) {
+        return (
+            <h4>
+                You need to be logged in to see this. Use the navigation links above to
+                sign up or log in!
+            </h4>
+        );
+    }
 
     // update if changes to income, age or risk
     const handleChange = (event) => {
@@ -146,27 +182,9 @@ const Results = (props) => {
         }
 
         );
-        //calculateUpdates();
+        updating = true;
+        console.log("updating");
     };
-
-
-    //  function calculateUpdates(){
-
-    //      // calculate years until retirement 
-    //      console.log(formState.age);
-    //      switch (formState.age) {
-    //          case AGE[0]:
-    //              console.log("young");
-    //              break;
-
-    //          case AGE[1]:
-    //             console.log("mid 20's");
-    //              break;
-    //          default:
-    //              break;
-    //      }
-
-    //     }
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
@@ -183,8 +201,6 @@ const Results = (props) => {
                 risk: user.risk
             });
         }
-
-
     };
 
 
@@ -244,6 +260,8 @@ const Results = (props) => {
                         Reset to user values
                     </button>
                 </form>
+                {/* <Doughnut data={values} options={options} /> */}
+                <Line data={formState.lineData} options={lineOptions} />
             </>
         );
     }
@@ -255,7 +273,7 @@ const Results = (props) => {
                 </h2>
                 {renderCurrentUserInfo()}
                 <Doughnut data={values} options={options} />
-                <Line data={lineData} options={lineOptions} />
+                <Line data={formState.lineData} options={lineOptions} />
 
             </div>
         </div>
