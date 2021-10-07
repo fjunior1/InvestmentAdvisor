@@ -1,41 +1,39 @@
 // Node Modules
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { UPDATE_USER } from '../utils/mutations';
+
+
 // Utilities
 import Auth from '../utils/auth';
 import { QUERY_USER, QUERY_ME } from '../utils/queries';
-// Components
-//import UserList from '../components/UserList';
+
 
 const Profile = (props) => {
   const { id } = useParams();
-
-
-  const [formState, setFormState] = useState({
-    username: '',
-    email: '',
-    password: '',
-    name: '',
-    lastName: '',
-    address: '',
-    phone: '',
-    income: '',
-    age: '',
-    risk: ''
-  })
-
-  // Get current user
+ 
+  const [formState, setFormState] = useState({ })
+  const [updateUser, err] = useMutation(UPDATE_USER);
+ // Get current user
   const { loading, data, error } = useQuery(id ? QUERY_USER : QUERY_ME, {
     variables: { id },
   });
 
-  // Get a list of all users
-  // const { usersLoading, data: usersData } = useQuery(QUERY_USERS);
-
   const user = data?.me || data?.user || {};
-  // const users = usersData?.users || [];
+  
+  useEffect(() => {
+    if (user && !loading) {
+      const { password, email, ...tmp } = user;
+      console.log(tmp);
+      setFormState(tmp);
+     }
+  },[user, loading])
+  if (err) console.log(err);
+
+  
+  //console.log(user);
+
 
   if (error) console.log(error);
 
@@ -57,8 +55,6 @@ const Profile = (props) => {
     );
   }
 
-
-
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -70,18 +66,27 @@ const Profile = (props) => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    console.log('HELLO');
     // const [updateUser, { error, data }] = useMutation(UPDATE_USER);
     try {
-      // console.log(formState);
-      // const { data } = await updateUser({
-      //   variables: { ...formState },
-      // });
+      console.log("update user called...");
+      console.log(formState);
+      const { data } = await updateUser({
+        variables: {
+          name:formState.name,
+          lastName:formState.lastName,
+          address:formState.address,
+          phone:formState.phone,
+          income:formState.income,
+          age:formState.age,
+          risk:formState.risk}
+      });
 
-      //FDIAZ NOTE this logs the user in automatically, we dont need this 
-      // Auth.login(data.addUser.token);
+     // console.log('DATA', data);
 
+     // Auth.login(data.login.token);
     } catch (e) {
-      console.error(e);
+      console.error("error calling update from preferences" + e);
     }
   };
 
@@ -89,66 +94,67 @@ const Profile = (props) => {
     if (id) return null;
     return (
 
-      // FD test form here
-
       <form onSubmit={handleFormSubmit}>
         <input
           className="form-input bg-lightgray"
           placeholder="Your username"
           name="username"
           type="text"
-          value={user.username}  // FDIAZ: should this be username ????
-          onChange={handleChange}
-          readonly
-          
+          value={formState.username}  // FDIAZ: should this be username ????
+          readOnly
+          disabled
         />
         <input
           className="form-input bg-lightgray"
           placeholder="Your email"
           name="email"
           type="email"
-          value={user.email}
-          onChange={handleChange}
+          value={formState.email}
+          readOnly
+          disabled
         />
-        <input
+        {/* <input
           className="form-input"
           placeholder="Password"
           name="password"
           type="password"
-          value={user.password}
+          value={formState.password}
           onChange={handleChange}
-        />
+        /> */}
 
         <input
           className="form-input"
           placeholder="Name"
           name="name"
           type="text"
-          value={user.name}  // FDIAZ: this is the name, not the username
+          value={formState.name}  // FDIAZ: this is the name, not the username
           onChange={handleChange}
         />
+
         <input
           className="form-input"
           placeholder="last name"
           name="lastName"
           type="string"
-          value={user.lastName}
+          value={formState.lastName}
           onChange={handleChange}
         />
+
         <input
           className="form-input"
           placeholder="Address"
           name="address"
           type="string"
-          value={user.address}
+          value={formState.address}
           onChange={handleChange}
         />
+        
         <input
           className="form-input"
           placeholder="Phone"
           name="phone"
           type="string"   //FDIAZ: string to make it simple
-          value={user.phone}
+          value={formState.phone}
           onChange={handleChange}
         />
 
@@ -208,7 +214,7 @@ const Profile = (props) => {
     <div>
       <div className="flex-row justify-center mb-3">
         <h2 className="col-12 col-md-10 bg-header text-light p-3 mb-5">
-          Viewing {id ? `${user.username}'s` : 'your'} profile.
+          Viewing {formState.username ? `${formState.username}'s` : 'your'} profile.
         </h2>
         {renderCurrentUserInfo()}
       </div>

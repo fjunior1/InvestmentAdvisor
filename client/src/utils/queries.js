@@ -17,6 +17,24 @@ export const QUERY_USER = gql`
       username
       email
       password
+      name
+      lastName
+      address
+      phone
+      income
+      age
+      risk
+    }
+  }
+`;
+
+export const QUERY_PREFS = gql`
+  query user($id: ID!) {
+    user(id: $id) {
+      _id
+      income
+      age
+      risk
     }
   }
 `;
@@ -32,6 +50,9 @@ export const QUERY_ME = gql`
       lastName
       address
       phone
+      income
+      age
+      risk
     }
   }
 `;

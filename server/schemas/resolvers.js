@@ -40,6 +40,22 @@ const resolvers = {
       const token = signToken(user);
 
       return { token, user };
+    },
+    updateUser: async (_,args/*{ username, email, password }*/) => {
+      //const user = await User.create(args /*{ username, email, password }*/);
+      console.log("These args from updateuser " + args._name);
+      const user = await User.findOneAndUpdate({ _id: args.id },args, { new: true} );
+      const token = signToken(user);
+      return { token, user };
+      
+    },
+    updatePrefs: async (_,args/*{ username, email, password }*/) => {
+      //const user = await User.create(args /*{ username, email, password }*/);
+      console.log("These args from updatePeferences " + args._name);
+      const user = await User.findOneAndUpdate({ _id: args.id },args, { new: true} );
+      const token = signToken(user);
+      return { token, user };
+      
     }
   }
 };

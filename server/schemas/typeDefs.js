@@ -31,6 +31,9 @@ const typeDefs = gql`
              name: String, lastName: String, address:String,
             phone: String, income:String, age:String, risk:String): Auth
     login(email: String!, password: String!): Auth
+    updateUser(  name: String, lastName: String, address:String,
+            phone: String, income:String, age:String, risk:String): Auth
+    updatePrefs(income:String, age:String, risk:String): Auth
   }
 `;
 

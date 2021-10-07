@@ -2,6 +2,13 @@
   {
     "username": "testuser",
     "email": "test@user.com",
-    "password": "password1234"
+    "password": "password1234",
+    "name": "franklyn",
+    "lastName": "diaz",
+    "address": "123 main st",
+    "phone": "1234567890",
+    "income": "30k-49k",
+    "age": "25-29",
+    "risk": "low"
   }
 ]

@@ -6,7 +6,6 @@ import { ADD_USER } from '../utils/mutations';
 
 //import Auth from '../utils/auth';
 
-
 const Signup = () => {
   const [formState, setFormState] = useState({
     username: '',
@@ -36,7 +35,7 @@ const Signup = () => {
 
     try {
       console.log(formState);
-      const { data } = await addUser({
+      /*const { data } =*/ await addUser({
         variables: { ...formState },
       });
 
@@ -119,30 +118,8 @@ const Signup = () => {
                   value={formState.phone}
                   onChange={handleChange}
                 />
-                {/* <input
-                  className="form-input"
-                  placeholder="Income"
-                  name="income"
-                  list="incomes"
-                  type="string"
-                  value={formState.income}
-                  onChange={handleChange}
-                />
-                <datalist id="incomes">
-                  <option value="<30k" />
-                  <option value="30k-49k" />
-                  <option value="50k-69k" />
-                  <option value="70k-89k" />
-                  <option value="90k-109k" />
-                  <option value="" />
-                  <option value="" />
-                  <option value="" />
-                  <option value="" />
-                  <option value="" />
-                  <option value="" />
-                </datalist> */}
 
-                <select class="form-input" name="income"
+                Income: <select class="form-input" name="income"
                   onChange={handleChange}>
                   <option value="<30k">&lt;30k</option>
                   <option value="30k-49k" >30k-49k</option>
@@ -150,29 +127,7 @@ const Signup = () => {
                   <option value="70k-89k" >70k-89k</option>
                   <option value="90k-109k">90k-109k</option>
                 </select>
-{/* 
-                <input
-                  className="form-input"
-                  placeholder="Age"
-                  name="age"
-                  list="ages"
-                  type="string"   // FDIAZ as string coming from string enum of age ranges 
-                  value={formState.age}
-                  onChange={handleChange}
-                />
-                <datalist id="ages">
-                  <option value="18-24" />
-                  <option value="25-29" />
-                  <option value="30-34" />
-                  <option value="35-39" />
-                  <option value="40-44" />
-                  <option value="45-49" />
-                  <option value="50-54" />
-                  <option value="55-59" />
-                  <option value="60+" />
-                  </datalist>  */}
                   
-                
                   <select class="form-input" name="age"
                   onChange={handleChange}>
                    <option value="18-24"> 18-24</option>
@@ -185,8 +140,6 @@ const Signup = () => {
                   <option value="55-59">55-59</option>
                   <option value="60+">60+</option>
                 </select>
-
-
 
                 <input
                   className="form-input"
