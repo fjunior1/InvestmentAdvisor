@@ -58,7 +58,11 @@ const Preferences = (props) => {
     try {
       console.log(...formState);
       /* const { data } =*/ await updatePrefs({
-        variables: { ...formState }
+        variables: {
+          income:formState.income,
+          age:formState.age,
+          risk:formState.risk
+         }
       });
 
       // Auth.login(data.login.token);

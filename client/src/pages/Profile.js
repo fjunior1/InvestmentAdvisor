@@ -24,7 +24,7 @@ const Profile = (props) => {
   
   useEffect(() => {
     if (user && !loading) {
-      const { password, email, ...tmp } = user;
+      const { password,  ...tmp } = user;
       console.log(tmp);
       setFormState(tmp);
      }
