@@ -4,15 +4,12 @@ import { Redirect, useParams } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { UPDATE_USER } from '../utils/mutations';
 
-
 // Utilities
 import Auth from '../utils/auth';
 import { QUERY_USER, QUERY_ME } from '../utils/queries';
 
-
 const Profile = (props) => {
   const { id } = useParams();
- 
   const [formState, setFormState] = useState({ })
   const [updateUser, err] = useMutation(UPDATE_USER);
  // Get current user
@@ -25,15 +22,10 @@ const Profile = (props) => {
   useEffect(() => {
     if (user && !loading) {
       const { password,  ...tmp } = user;
-      console.log(tmp);
       setFormState(tmp);
      }
   },[user, loading])
   if (err) console.log(err);
-
-  
-  //console.log(user);
-
 
   if (error) console.log(error);
 
@@ -67,10 +59,7 @@ const Profile = (props) => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     console.log('HELLO');
-    // const [updateUser, { error, data }] = useMutation(UPDATE_USER);
     try {
-      console.log("update user called...");
-      console.log(formState);
       const { data } = await updateUser({
         variables: {
           name:formState.name,
@@ -82,9 +71,6 @@ const Profile = (props) => {
           risk:formState.risk}
       });
 
-     // console.log('DATA', data);
-
-     // Auth.login(data.login.token);
     } catch (e) {
       console.error("error calling update from preferences" + e);
     }
@@ -100,7 +86,7 @@ const Profile = (props) => {
           placeholder="Your username"
           name="username"
           type="text"
-          value={formState.username}  // FDIAZ: should this be username ????
+          value={formState.username}  
           readOnly
           disabled
         />
@@ -113,15 +99,6 @@ const Profile = (props) => {
           readOnly
           disabled
         />
-        {/* <input
-          className="form-input"
-          placeholder="Password"
-          name="password"
-          type="password"
-          value={formState.password}
-          onChange={handleChange}
-        /> */}
-
         <input
           className="form-input"
           placeholder="Name"
@@ -153,7 +130,7 @@ const Profile = (props) => {
           className="form-input"
           placeholder="Phone"
           name="phone"
-          type="string"   //FDIAZ: string to make it simple
+          type="string"  
           value={formState.phone}
           onChange={handleChange}
         />

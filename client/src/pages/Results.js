@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 //import { UPDATE_PREFS } from '../utils/mutations';
-import  Calcs  from '../utils/calcs';
+import Calcs from '../utils/calcs';
 import { Doughnut, Line } from 'react-chartjs-2';
 
 // Utilities
@@ -14,33 +14,48 @@ const AGE = ["18-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-
 const INCOME = ["<30k", "30k-49k", "50k-69k", "70k-89k", "90k-109k", "110k-129k",
     "130k-149k", "150k-169k", "170k-189k", "190k-209k", "210k-229k", "230k-249k", "250k+"];
 const RISK = ["minimum", "low", "medium", "high", "maximum"];
-const RiskInt = [0.03,    0.07,  0.1 , 0.14, 0.2 ]
+const RiskInt =    [0.03, 0.05, 0.08, 0.1, 0.12]
+const BadRiskInt = [0,    -.01,   -.02,  -.03, -0.04];
+// line chart input
+const lineData = {
+    labels: [],
+    //dataset 0- 
+    datasets: [
+        {
+            label: 'Best projection',
+            data: [],
+            fill: false,
+            backgroundColor: 'rgb(57, 215, 45)',
+            borderColor: 'rgba(255, 99, 132, 0.2)',
+        },
+        {
+            label: 'realistic projection',
+            data: [],
+            fill: false,
+            backgroundColor: 'rgb(255, 255, 0)',
+            borderColor: 'rgba(255, 99, 132, 0.2)',
+        },
+        {
+            label: 'worst projection',
+            data: [],
+            fill: false,
+            backgroundColor: 'rgb(232, 21, 21)',
+            borderColor: 'rgba(255, 99, 132, 0.2)',
+        }
+    ],
+};
 
-    // line chart input
-    const lineData = {
-        labels: ['1', '2', '3', '4', '5', '6'],
-        datasets: [
+const lineOptions = {
+    scales: {
+        yAxes: [
             {
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                fill: false,
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgba(255, 99, 132, 0.2)',
+                ticks: {
+                    beginAtZero: false,
+                },
             },
         ],
-    };
-
-    const lineOptions = {
-        scales: {
-            yAxes: [
-                {
-                    ticks: {
-                        beginAtZero: true,
-                    },
-                },
-            ],
-        },
-    };
+    },
+};
 
 var updating = false;
 
@@ -94,11 +109,11 @@ const Results = (props) => {
         if (user && !loading) {
             const { name, password, lastName, email, address, phone, ...tmp } = user;
             //console.log("before: " +tmp);
-            tmp.lineData =lineData;
+            tmp.lineData = lineData;
             // console.log("after: " + tmp);
-            setFormState(tmp );
+            setFormState(tmp);
         }
-    }, [ user, loading])
+    }, [user, loading])
 
     useEffect(() => {
         if (updating && (formState !== undefined)) {
@@ -111,18 +126,31 @@ const Results = (props) => {
             lineData.labels = [];
             lineData.datasets[0].data = [];
 
-           // get index of age to set the years of savings for retirement
+            // get index of age to set the years of savings for retirement
             console.log("age index: " + AGE.indexOf(formState.age))
             const indexAge = AGE.indexOf(formState.age);
             const riskRate = RiskInt[RISK.indexOf(formState.risk)]
+            const badRiskRate = BadRiskInt[RISK.indexOf(formState.risk)]
             const savingsRate = 1000;
             // set years
-            for (let i = 0 ,age = (20 + 5*indexAge); age < 65;age++,i++){
+            for (let i = 0, age = (20 + 5 * indexAge); age < 65; age++, i++) {
                 lineData.labels[i] = age;
 
-                // calculate savings
+                // calculate best projection
                 lineData.datasets[0].data[i] = (i === 0) ? savingsRate :
-                                               lineData.datasets[0].data[i - 1] * (1 + riskRate);
+                    lineData.datasets[0].data[i - 1] * (1 + riskRate);
+                
+                // calculate realistic projection
+                const rate =  /*badRiskRate +*/ (riskRate - badRiskRate)*Math.random() ;
+                console.log (rate *100)
+                lineData.datasets[1].data[i] = (i === 0) ? savingsRate :
+                    lineData.datasets[1].data[i - 1] * (1 + rate/*badRiskRate + Math.random(riskRate-badRiskRate) */);
+                
+                // calculate worst projection
+                lineData.datasets[2].data[i] = (i === 0) ? savingsRate :
+                    lineData.datasets[2].data[i - 1] * (1 + badRiskRate);
+                
+                
             }
             console.log(lineData.datasets[0].data)
 
@@ -149,8 +177,8 @@ const Results = (props) => {
                 risk: formState.risk
             });
         }
-        
-    }, [ formState, user, loading])
+
+    }, [formState, user, loading])
 
     if (error) console.log(error);
 

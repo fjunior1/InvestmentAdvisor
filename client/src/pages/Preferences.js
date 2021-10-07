@@ -21,7 +21,6 @@ const Preferences = (props) => {
   useEffect(() => {
     if (user && !loading) {
       const {name, username, password, lastName, email, address, phone, ...tmp } = user;
-      console.log(tmp);
       setFormState(tmp);
      }
   },[user, loading])
@@ -56,7 +55,6 @@ const Preferences = (props) => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(...formState);
       /* const { data } =*/ await updatePrefs({
         variables: {
           income:formState.income,
