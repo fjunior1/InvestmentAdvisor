@@ -15,11 +15,11 @@ const INCOME = ["<30k", "30k-49k", "50k-69k", "70k-89k", "90k-109k", "110k-129k"
     "130k-149k", "150k-169k", "170k-189k", "190k-209k", "210k-229k", "230k-249k", "250k+"];
 const IncomeInt = [30000, 40000, 60000, 80000, 100000, 120000, 140000, 160000, 180000, 200000, 220000, 240000, 300000];
 const RISK = ["minimum", "low", "medium", "high", "maximum"];
-const RiskInt = [0.04, 0.05, 0.08, 0.1, 0.12]
-const BadRiskInt = [0.02, -.01, -.03, -.05, -0.05];
-const Savings = ['100', '250', '500', '750', '1000', '1250', '1500', '1750', '2000', '2500'];
-const SavingsInt = [100, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2500];
-const Percent = ['0.025', '0.03', '0.04', '0.05', '0.06', '0.075', '0.08', '0.09', '0.1', '0.125', '0.15', '0.175', ' 0.2'];
+const RiskInt = [0.04, 0.05, 0.08, 0.1, 0.15]
+const BadRiskInt = [0.0, -.01, -.03, -.05, -0.05];
+const Savings = ['100', '250', '500', '750', '1000', '1250', '1500', '1750', '2000', '2500', '5000', '10000','15000', '17500', '20000'];
+const SavingsInt = [100, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2500, 5000, 10000, 15000, 17500, 20000];
+const Percent = ['0.025', '0.03', '0.04', '0.05', '0.06', '0.075', '0.08', '0.09', '0.1', '0.125', '0.15', '0.175', '0.2'];
 const PercentInt = [0.025, 0.03, 0.04, 0.05, 0.06, 0.075, 0.08, 0.09, 0.1, 0.125, 0.15, 0.175, 0.2];
 
 // line chart input
@@ -31,7 +31,7 @@ const lineData = {
             label: 'Best projection',
             data: [],
             fill: false,
-            backgroundColor: 'rgb(57, 215, 45)',
+            backgroundColor: 'rgb(0, 200, 0)',
             borderColor: 'rgba(255, 99, 132, 0.2)',
         },
         {
@@ -52,14 +52,14 @@ const lineData = {
             label: 'realistic projection -2',
             data: [],
             fill: false,
-            backgroundColor: 'rgb(255, 255, 0)',
+            backgroundColor: 'rgb(155, 255, 50)',
             borderColor: 'rgba(255, 99, 132, 0.2)',
         },
         {
             label: 'realistic projection - 3',
             data: [],
             fill: false,
-            backgroundColor: 'rgb(255, 255, 0)',
+            backgroundColor: 'rgb(255, 200, 100)',
             borderColor: 'rgba(255, 99, 132, 0.2)',
         }
     ],
@@ -71,7 +71,7 @@ const lineOptions = {
             labels: {
                 // This more specific font property overrides the global property
                 font: {
-                    size: 10
+                    size: 14
                 }
             }
         }
@@ -90,6 +90,34 @@ const lineOptions = {
     },
 };
 
+const values = {
+    labels: ['Food', 'Housing', 'Healthcare', 'savings', 'Leisure', 'Other'],
+    datasets: [
+        {
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1,
+        },
+    ],
+};
+
+
 var updating = false;
 
 const Results = (props) => {
@@ -99,34 +127,12 @@ const Results = (props) => {
 
     // do calculations here
 
-    const values = {
-        labels: ['Food', 'Housing', 'Healthcare', 'savings', 'Leisure', 'Other'],
-        datasets: [
-            {
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                ],
-                borderWidth: 1,
-            },
-        ],
-    };
+
 
     const options = {
+        pieceLabel: {
+            mode: 'value'
+        }
     };
 
 
@@ -149,6 +155,8 @@ const Results = (props) => {
             tmp.income = INCOME[0];
             tmp.highestMoneyLast = 0;
             tmp.lowestMoneyLast = 0;
+            tmp.DoughnutData = values;
+            tmp.saveRate = '0';
             // console.log("after: " + tmp);
             setFormState(tmp);
         }
@@ -185,9 +193,27 @@ const Results = (props) => {
             // console.log(""  );
 
             // const savingsRate = 1000;
+            const income = IncomeInt[INCOME.indexOf(newData.income)];
             const savingsRate = newData.percentChecked ?
-                IncomeInt[INCOME.indexOf(newData.income)] * PercentInt[Percent.indexOf(newData.percent)] :
+                income * PercentInt[Percent.indexOf(newData.percent)] :
                 SavingsInt[Savings.indexOf(newData.savings)];
+            
+            newData.savingsRate = Number(savingsRate).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
+            // update doughnut data with savings rate and rest of expenses as percentage of income
+            const incomeRest = income - savingsRate - .25 * income;
+            newData.DoughnutData = JSON.parse(JSON.stringify(values));
+            newData.DoughnutData.datasets[0].data = [];
+            newData.DoughnutData.datasets[0].data[0]/*food*/ = incomeRest * .10 ;
+            newData.DoughnutData.datasets[0].data[1]/*housing*/ = .25 * income;
+            newData.DoughnutData.datasets[0].data[2]/*healthcare*/ = incomeRest * .15 ;
+            newData.DoughnutData.datasets[0].data[3]/*savings*/ = savingsRate; // this one from savingsRate
+            newData.DoughnutData.datasets[0].data[4]/*leisure*/ = incomeRest * .08;
+            newData.DoughnutData.datasets[0].data[5]/*Other*/ = incomeRest * .05;
+
+
+            values.datasets[0].data = newData.DoughnutData;
+
+            console.log("savings rate: " + savingsRate)
             // set years
             for (let i = 0, age = (20 + 5 * indexAge); age < 65; age++, i++) {
                 newData.lineData.labels[i] = age;
@@ -203,15 +229,15 @@ const Results = (props) => {
 
 
                 // calculate realistic projection(s)
-                var rate = (riskRate - badRiskRate) * 1.1 * Math.random();
+                var rate = (riskRate - badRiskRate) * 1.02 * Math.random();
                 newData.lineData.datasets[2].data[i] = (i === 0) ? savingsRate :
                     newData.lineData.datasets[2].data[i - 1] * (1 + rate);
 
-                rate = (riskRate - badRiskRate) * 1.1 * Math.random();
+                rate = (riskRate - badRiskRate) * 1.02 * Math.random();
                 newData.lineData.datasets[3].data[i] = (i === 0) ? savingsRate :
                     newData.lineData.datasets[3].data[i - 1] * (1 + rate);
 
-                rate = (riskRate - badRiskRate) * 1.1 * Math.random();
+                rate = (riskRate - badRiskRate) * 1.02 * Math.random();
                 newData.lineData.datasets[4].data[i] = (i === 0) ? savingsRate :
                     newData.lineData.datasets[4].data[i - 1] * (1 + rate);
 
@@ -220,8 +246,11 @@ const Results = (props) => {
             }
             //console.log(lineData.datasets[0].data)
             // var nf = Intl.NumberFormat();
-            newData.highestMoneyLast = Number(newData.lineData.datasets[0].data[newData.lineData.datasets[0].data.length - 1]).toFixed(2);
-            newData.lowestMoneyLast = Number(newData.lineData.datasets[1].data[newData.lineData.datasets[1].data.length - 1]).toFixed(2);
+            newData.highestMoneyLast = Number(newData.lineData.datasets[0].data[newData.lineData.datasets[0].data.length - 1]).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            // Mean of 3 realistic projections
+            newData.lowestMoneyLast = ( (Number(newData.lineData.datasets[2].data[newData.lineData.datasets[2].data.length - 1]) +
+                Number(newData.lineData.datasets[3].data[newData.lineData.datasets[3].data.length - 1]) +
+                Number(newData.lineData.datasets[4].data[newData.lineData.datasets[4].data.length - 1])) /3).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             // switch (formState.age) {
             //     case AGE[0]:
 
@@ -247,7 +276,7 @@ const Results = (props) => {
             });
         }
 
-    }, [formState, user, loading])
+    }, [values, formState, user, loading])
 
     if (error) console.log(error);
 
@@ -354,7 +383,7 @@ const Results = (props) => {
                         <input
                             type="checkbox"
                             name="percentChecked"
-                            //checked={formState.percentChecked}
+                            checked={formState.percentChecked}
                             onChange={handleChange}
                         /> percentage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         {/* risk  */}
@@ -365,6 +394,13 @@ const Results = (props) => {
                             <option value="1000">1000</option>
                             <option value="1500">1500</option>
                             <option value="2000">2000</option>
+                            <option value="2000">2000</option>
+                            <option value="2500">2500</option>
+                            <option value="5000">5000</option>
+                            <option value="10000">10000</option>
+                            <option value="15000">15000</option>
+                            <option value="17500">17500</option>
+                            <option value="20000">20000</option>
                         </select>
                         {/* risk  */}
                         percentage: <select
@@ -381,10 +417,9 @@ const Results = (props) => {
                             <option value="0.09">9%</option>
                             <option value="0.1">10%</option>
                             <option value="0.125">12.5%</option>
-                            <option value="0.15%">15%</option>
+                            <option value="0.15">15%</option>
                             <option value="0.175">17.5%</option>
                             <option value="0.2">20%</option>
-
                         </select>
                     </div>
 
@@ -396,11 +431,16 @@ const Results = (props) => {
                         Reset to user values
                     </button>
                 </form>
-                Based on your inputs you will have:<br />
-                Highest rate of return <strong>${formState.highestMoneyLast}</strong>  for retirement<br />
-                Lowest rate of return <strong>${formState.lowestMoneyLast}</strong> for retirement <br />
+                <div>
+                    <div className="report-txt">Based on your inputs (yearly savings of $
+                        <strong className="report-var-txt"> {formState.savingsRate} at { RiskInt[RISK.indexOf(formState.risk)]*100}% </strong>
+                        ) you will have:</div>
+                <div className ="report-txt">Highest  return <strong className="report-var-txt">$ {formState.highestMoneyLast}</strong>  for retirement</div>
+                <div className ="report-txt">realistic return <strong className="report-var-txt">$ {formState.lowestMoneyLast}</strong> for retirement
+                </div>
+</div>
                 <Line data={formState.lineData} options={lineOptions} />
-                <Doughnut data={values} options={options} />
+                <Doughnut data={formState.DoughnutData} options={options} />
             </>
         );
     }

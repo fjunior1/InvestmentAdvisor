@@ -1344,7 +1344,18 @@ label form [type='radio'] {
   max-width: 100%;
 }
 
+.report-txt {
+   font-size: 1.5rem;
+   /*color: red;*/
+   display: block;
+   text-align: center;
+   padding: 5px;
+}
 
+.report-var-txt {
+  color:blue;
+  font-size: bigger;
+}
 @media screen and (max-width: 375px) {
   h1 {
     font-size: 1rem;
