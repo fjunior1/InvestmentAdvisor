@@ -1130,7 +1130,7 @@ form .form-group {
 
 form .form-input,
 form .form-textarea {
-  display: block;
+  display: inline-block;
 }
 
 form select {
@@ -1150,7 +1150,7 @@ form .form-label {
 }
 
 form .form-input {
-  width: 100%;
+   width:100%; 
   padding: 0.75rem;
   color: #1a1a1a;
   background-color: #ffffff;
@@ -1158,6 +1158,12 @@ form .form-input {
   font-size: 1.2rem;
   border: 1px solid #484848;
   border-radius: 0.3rem;
+}
+
+form .form-select{
+
+  width: 150px;
+  margin: 0.625rem 1rem;
 }
 
 form .form-input.form-input-squared {
@@ -1338,8 +1344,54 @@ label form [type='radio'] {
   max-width: 100%;
 }
 
+
+@media screen and (max-width: 375px) {
+  h1 {
+    font-size: 1rem;
+  }
+   h2 {
+    font-size: 1rem;
+  }
+   h3 {
+    font-size: 1.75rem;
+  }
+  .btn.btn-lg {
+    font-size: .8rem;
+    padding: 0.2rem .2rem;
+    margin:.1  !important;
+  }
+  .m-2 {
+    margin: 0.1rem !important;
+  }
+  form .form-input {
+    width:100%; 
+   padding: 0.25rem;
+   color: #1a1a1a;
+   background-color: #ffffff;
+   margin: 0.25rem 0;
+   font-size: 1rem;
+   border: 1px solid #484848;
+   border-radius: 0.3rem;
+ }
+ 
+ form .form-select{
+ 
+   width: 100px;
+   margin: 0.625rem .1rem;
+ }
+
+ .mb-5 {
+  margin-bottom: .25rem !important;
+}
+}
+
+
 /* col-sm */
 @media screen and (min-width: 640px) {
+
+  h1 {
+    font-size: 2.25rem;
+  }
   .col-sm-auto {
     flex-grow: 1;
     flex-basis: 0;
