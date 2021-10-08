@@ -1356,6 +1356,9 @@ label form [type='radio'] {
   color:blue;
   font-size: bigger;
 }
+
+
+/*media for mobile*/
 @media screen and (max-width: 375px) {
   h1 {
     font-size: 1rem;
@@ -1376,23 +1379,48 @@ label form [type='radio'] {
   }
   form .form-input {
     width:100%; 
-   padding: 0.25rem;
+   padding: 0.3rem;
    color: #1a1a1a;
    background-color: #ffffff;
-   margin: 0.25rem 0;
-   font-size: 1rem;
+   margin: 0.2rem 0;
+   font-size: .9rem;
    border: 1px solid #484848;
    border-radius: 0.3rem;
  }
  
  form .form-select{
- 
-   width: 100px;
-   margin: 0.625rem .1rem;
+    width: 70px;
+   margin: 0.125rem 0;
+   font-size: .7rem;
+   margin-right: .2rem !important;
  }
 
  .mb-5 {
   margin-bottom: .25rem !important;
+}
+.report-txt {
+  font-size: .9rem;
+  /*color: red;*/
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 5px;
+}
+
+.report-var-txt {
+ color:blue;
+ font-size: bigger;
+}
+
+.form-entry-line{
+  font-size: .6rem;
+}
+
+.line-chart{
+  /* display: block; */
+  background-color: blue;
+  /*width: 100%;*/
+  height: 600px;
 }
 }
 
