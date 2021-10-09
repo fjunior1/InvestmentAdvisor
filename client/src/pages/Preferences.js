@@ -55,12 +55,13 @@ const Preferences = (props) => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
+      console.log(formState);
       /* const { data } =*/ await updatePrefs({
         variables: {
           income:formState.income,
           age:formState.age,
           risk:formState.risk
-         }
+         },
       });
 
       // Auth.login(data.login.token);
@@ -75,7 +76,7 @@ const Preferences = (props) => {
       <form onSubmit={handleFormSubmit}>
 
 {/* age  */}
-        Age:<select class="form-input" name="age"
+        Age:<select className="form-input" name="age"
           onChange={handleChange}>
           <option value="18-24"> 18-24</option>
           <option value="25-29">25-29</option>
@@ -89,7 +90,7 @@ const Preferences = (props) => {
         </select>
 
       {/* income */}
-       Income: <select class="form-input" name="income"
+       Income: <select className="form-input" name="income"
           onChange={handleChange}>
           <option value="<30k">&lt;30k</option>
           <option value="30k-49k" >30k-49k</option>
@@ -99,7 +100,7 @@ const Preferences = (props) => {
         </select>      
 
         {/* risk  */}
-       Risk: <select class="form-input" name="risk"
+       Risk: <select className="form-input" name="risk"
                   onChange={handleChange}>
                    <option value="minimum">minimum</option>
                   <option value="low">low</option>
@@ -107,17 +108,20 @@ const Preferences = (props) => {
                   <option value="high">high</option>
                   <option value="maximum">maximum</option>
                 </select>
-
+{/* cursor : 'pointer' */}
         <button
           className="btn btn-block btn-primary"
-          style={{ cursor: 'pointer' }}
+         
           type="submit"
+          
         >
           Update
         </button>
       </form>
     );
   }
+
+
   return (
     <div>
       <div className="flex-row justify-center mb-3">

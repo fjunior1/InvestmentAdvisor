@@ -173,10 +173,10 @@ const Profile = (props) => {
           <option value="high" />
           <option value="maximum" />
         </datalist> */}
-
+{/* {{ cursor: 'pointer' }} */}
         <button
           className="btn btn-block btn-primary"
-          style={{ cursor: 'pointer' }}
+          style= {{ display: 'none' }} 
           type="submit"
         >
           Update

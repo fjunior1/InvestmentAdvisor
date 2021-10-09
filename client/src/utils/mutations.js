@@ -37,11 +37,8 @@ export const UPDATE_USER = gql`
                      $phone: String, $income: String, $age:String, $risk:String) {
     updateUser( name: $name, lastName: $lastName, address:$address,
             phone: $phone, income:$income, age:$age, risk:$risk  ) {
-      token
-      user {
         _id
         username
-      }
     }
   }
 `;
@@ -49,11 +46,8 @@ export const UPDATE_USER = gql`
 export const UPDATE_PREFS = gql`
   mutation updatePrefs( $income: String, $age:String, $risk:String) {
     updatePrefs(income:$income, age:$age, risk:$risk  ) {
-      token
-      user {
         _id
         username
-      }
     }
   }
 `;
